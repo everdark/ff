@@ -69,3 +69,26 @@ matched.ff <- merged.ff[ffwhich(merged.ff, d %in% covering_dates),]
 # check
 sum(!unique(matched.ff$d[]) %in% covering_dates)
 
+
+################################################################################
+####                        I/O (very tricky!)                              ####
+################################################################################
+# start a new session with cleaned environment before test for this section
+library(ffbase)
+load.ffdf(dir='data/')
+dat.ff
+
+# save back the original ffdf: overwrite no problem
+save.ffdf(dat.ff, dir='data/')
+
+# apppend new ffdf to the original one, then save: overwrite no problem
+new.ff <- dat.ff
+dat.ff <- ffdfappend(dat.ff, new.ff)
+save.ffdf(dat.ff, dir='data/')
+
+# operated on ffdf and save the changed: overwrite FAILED!
+dat.ff <- dat.ff[ffwhich(dat.ff, score <= 1000),]
+save.ffdf(dat.ff, dir='data/')
+
+
+
